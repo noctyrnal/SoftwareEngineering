@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Kitchen Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/kitchen_dashboard.css' %}">
+</head>
+<body>
+  <!-- notification sound preload -->
+  <audio id="notification-sound" src="{% static 'sound/ding.mp3' %}" preload="auto"></audio>
+
+  <!-- Expose CSRF token for JS -->
+  <script>
+    const CSRF_TOKEN = "{{ csrf_token }}";
+  </script>
+
+  <div class="dashboard-container">
+    <h1>Kitchen Dashboard</h1>
+    <div class="orders-grid" id="orders-grid">
+      {% for order in orders %}
+        <div class="order-card" data-id="{{ order.id }}">
+          <div class="card-header">
+            <div class="order-meta">
+              <span class="order-time">{{ order.ordered_at|date:"Y-m-d H:i" }}</span>
+              <span class="order-table">Table {{ order.table_number }}</span>
+            </div>
+            <span class="badge badge-{{ order.status }}">{{ order.get_status_display }}</span>
+          </div>
+          <div class="card-body">
+            <p class="customer-name">{{ order.customer_name }}</p>
+            {% if order.special_request %}
+              <p class="special-request">📝 {{ order.special_request }}</p>
+            {% endif %}
+            <ul class="item-list">
+              {% for item in order.items.all %}
+                <li>{{ item.menu_item.name }} ×{{ item.quantity }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="card-footer">
+            <form method="post" class="status-form">
+              {% csrf_token %}
+              <input type="hidden" name="order_id" value="{{ order.id }}">
+              <select name="status">
+                {% for value,label in order.STATUS_CHOICES %}
+                  <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
+              </select>
+              <button type="submit">Update</button>
+            </form>
+          </div>
+        </div>
+      {% empty %}
+        <p class="no-orders">No orders yet.</p>
+      {% endfor %}
+    </div>
+
+    <p class="back-link"><a href="{% url 'take_order' %}">← Back to Order Form</a></p>
+  </div>
+
+  {# Use the list of seen_ids provided by the view #}
+  {{ seen_ids|json_script:"seen-ids" }}
+
+  <script>
+    const ordersGrid = document.getElementById('orders-grid');
+    const apiUrl      = "{% url 'kitchen_orders_api' %}";
+    const audio       = document.getElementById('notification-sound');
+    let seenOrderIds  = new Set(
+      JSON.parse(document.getElementById('seen-ids').textContent)
+    );
+
+    function renderCard(o) {
+      const itemsHtml = o.items.map(i =>
+        `<li>${i.name} ×${i.qty}</li>`
+      ).join('');
+
+      return `
+        <div class="order-card" data-id="${o.id}">
+          <div class="card-header">
+            <div class="order-meta">
+              <span class="order-time">${o.ordered_at}</span>
+              <span class="order-table">Table ${o.table_number}</span>
+            </div>
+            <span class="badge badge-${o.status}">
+              ${o.status.charAt(0).toUpperCase() + o.status.slice(1)}
+            </span>
+          </div>
+          <div class="card-body">
+            <p class="customer-name">${o.customer_name}</p>
+            ${o.special_request 
+              ? `<p class="special-request">📝 ${o.special_request}</p>` 
+              : ''}
+            <ul class="item-list">${itemsHtml}</ul>
+          </div>
+          <div class="card-footer">
+            <form method="post" class="status-form">
+              <input type="hidden" name="csrfmiddlewaretoken" value="${CSRF_TOKEN}">
+              <input type="hidden" name="order_id" value="${o.id}">
+              <select name="status">
+                <option value="pending"   ${o.status==='pending'   ? 'selected':''}>Pending</option>
+                <option value="cancelled" ${o.status==='cancelled' ? 'selected':''}>Cancelled</option>
+                <option value="finished"  ${o.status==='finished'  ? 'selected':''}>Finished</option>
+              </select>
+              <button type="submit">Update</button>
+            </form>
+          </div>
+        </div>`;
+    }
+
+    async function refreshOrders() {
+      try {
+        const resp = await fetch(apiUrl, { credentials: 'same-origin' });
+        const json = await resp.json();
+        const currentIds = json.orders.map(o => o.id);
+
+        // play ding for new orders
+        currentIds.forEach(id => {
+          if (!seenOrderIds.has(id)) audio.play().catch(() => {});
+        });
+
+        seenOrderIds = new Set(currentIds);
+
+        if (!json.orders.length) {
+          ordersGrid.innerHTML = '<p class="no-orders">No orders yet.</p>';
+        } else {
+          ordersGrid.innerHTML = json.orders.map(renderCard).join('');
+        }
+      } catch (e) {
+        console.error('Failed to refresh orders:', e);
+      }
+    }
+
+    setInterval(refreshOrders, 5000);
+  </script>
+</body>
+</html>
