@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Point-of-Sale Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/order_form.css' %}">
+  <style>
+    .choice-container {
+      max-width: 400px;
+      margin: 80px auto;
+      text-align: center;
+    }
+    .choice-container h1 {
+      margin-bottom: 40px;
+      font-size: 1.8rem;
+    }
+    .choice-container a {
+      display: block;
+      margin: 12px 0;
+      padding: 14px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      transition: background 0.3s;
+    }
+    .choice-container a:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="choice-container">
+    <h1>Welcome, {{ request.user.username }}!</h1>
+    <a href="{% url 'take_order' %}">🛒 Take a New Order</a>
+    <a href="{% url 'kitchen_dashboard' %}">👩‍🍳 View All Orders</a>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit" style="margin-top:20px; background:#dc3545;">Logout</button>
+    </form>
+  </div>
+</body>
+</html>
