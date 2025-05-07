@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Take Customer Order</title>
+    <link rel="stylesheet" href="{% static 'css/order_form.css' %}">
+</head>
+<body>
+<div class="form-container">
+    <h1>Take Customer Order</h1>
+
+    {# —————— Flash Messages —————— #}
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="message {{ message.tags }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <p>{{ form.table_number.label_tag }} {{ form.table_number }}</p>
+        <p>{{ form.customer_name.label_tag }} {{ form.customer_name }}</p>
+        <p>{{ form.special_request.label_tag }} {{ form.special_request }}</p>
+
+        <h2>Order Items</h2>
+        {{ formset.management_form }}
+
+        <div id="formset">
+            {% for item_form in formset %}
+                <div class="item-form">
+                    {% for hidden in item_form.hidden_fields %}{{ hidden }}{% endfor %}
+
+                    <!-- Category Dropdown -->
+                    <p>
+                        <label>Category:</label>
+                        <select class="category-select" name="category">
+                            <option value="">---------</option>
+                            <option value="Drink">Drink</option>
+                            <option value="Food">Food</option>
+                            <option value="Dessert">Dessert</option>
+                        </select>
+                    </p>
+
+                    <!-- Menu Item -->
+                    <p>
+                        <label>Item:</label>
+                        {{ item_form.menu_item }}
+                    </p>
+
+                    <!-- Quantity -->
+                    <p>
+                        <label>Quantity:</label>
+                        {{ item_form.quantity }}
+                    </p>
+
+                    <!-- Price Display -->
+                    <p><strong>Price: £<span class="item-price">0.00</span></strong></p>
+
+                    <button type="button" class="remove-form">Remove</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" id="add-form">Add Item</button>
+        <p><strong>Total: £<span id="total-price">0.00</span></strong></p>
+        <button type="submit">Submit Full Order</button>
+    </form>
+</div>
+
+<!-- Inject menu items as JSON -->
+{{ menu_items|json_script:"menu-items" }}
+<script src="{% static 'js/order_form.js' %}"></script>
+</body>
+</html>

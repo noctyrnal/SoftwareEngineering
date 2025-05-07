@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 40px;
+    margin: 0;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+form input,
+form textarea,
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* —————— Flash Messages Styling —————— */
+
+/* Container for all messages */
+.messages {
+    margin-bottom: 1rem;
+}
+
+/* Base message styling */
+.message {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Success (green) */
+.message.success {
+    background-color: #e6ffed;
+    border: 1px solid #2ecc71;
+    color: #1d7a3a;
+}
+
+/* Error (red) */
+.message.error {
+    background-color: #ffe6e6;
+    border: 1px solid #e74c3c;
+    color: #c0392b;
+}
+
+/* Info (blue) */
+.message.info {
+    background-color: #e6f2ff;
+    border: 1px solid #3498db;
+    color: #2c3e50;
+}
