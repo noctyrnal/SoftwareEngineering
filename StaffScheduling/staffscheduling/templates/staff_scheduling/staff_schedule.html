@@ -1,12 +1,59 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Staff Scheduling</title>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
-    </head>
-    <body>
-        <span class="message">Hello, there {{ name }}!</span> It's {{ date | date:'l, d F, Y' }} at {{ date | time:'H:i:s' }}.
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | POS System</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
+</head>
+<body>
+    <div class="main-container">
+        <div class="title-container">
+            <h3>Staff Schedule</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Log in</button>
+            </form>
+        </div>
+        <div class="content-container">
+            <div class="left-container">
+                <a href="{% url 'scheduling_page' %}" class="left-button">Schedule</a>
+                <a href="{% url 'time_off_page' %}" class="left-button">Time Off</a>
+                <a href="{% url 'request_changes_page' %}" class="left-button">Request Changes</a>
+                <a href="{% url 'schedule_management_page' %}" class="left-button">Schedule Management</a>
+            </div>
+            <div class="right-container">
+                <div class="staff-info-container">
+                    <img src="{% static 'staffscheduling/Portrait_Placeholder.png' %}" alt="Portrait Placeholder" class="staff-portrait">
+                    <div class="staff-info-text">
+                        <h2>John Doe</h2>
+                        <p>Waiter</p>
+                    </div>
+                </div>
+                <div class="staff-schedule-container">
+                    <table class="staff-schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Shift</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in schedule_data %}
+                            <tr>
+                                <td>
+                                    {{ entry.day }}<br>
+                                    <span class="shift-date">{{ entry.date }}</span>
+                                </td>
+                                <td>{{ entry.time }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
