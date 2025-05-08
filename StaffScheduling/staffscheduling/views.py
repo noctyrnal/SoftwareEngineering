@@ -13,15 +13,16 @@ def staff_scheduling(request, name):
 
     # Add the day of the week dynamically based on the date
     for entry in schedule_data:
-        entry_date = dt.strptime(entry["date"], "%d/%m/%Y")  # Parse the date
+        # Parse the date in d/m/y format
+        entry_date = dt.strptime(entry["date"], "%d/%m/%Y")
         entry["day"] = entry_date.strftime("%A")  # Get the day of the week
 
     return render(
         request,
-        'staff_scheduling/staff_schedule.html', # Request the static staff_schedule.htm file
+        'staff_scheduling/staff_schedule.html',
         {
             'name': name,
-            'schedule_data': schedule_data, # Schedule data from schedule_data.json
+            'schedule_data': schedule_data,
         }
     )
 
@@ -93,9 +94,47 @@ def request_changes_page(request):
 
     return render(request, 'staff_scheduling/request_changes.html')
 
-def schedule_page(request):
-    return render(request, 'staff_scheduling/schedule.html')
-
-
 def schedule_management_page(request):
-    return render(request, 'staff_scheduling/schedule_management.html')
+    # Path to the JSON file
+    json_file_path = os.path.join(os.path.dirname(__file__), 'schedule_data.json')
+
+    # Load existing data from the JSON file
+    if os.path.exists(json_file_path):
+        with open(json_file_path, 'r') as file:
+            schedule_data = json.load(file)
+    else:
+        schedule_data = []
+
+    if request.method == "POST":
+        # Check if the "Log in" button was pressed
+        if "login" in request.POST:
+            # Handle the login logic here (if needed)
+            print("Log in button pressed")
+            return HttpResponseRedirect(request.path)
+
+        # Check if the "Update" button was pressed
+        if "update" in request.POST:
+            # Get the row index to update
+            row_index = int(request.POST.get("update")) - 1
+
+            # Get the updated date and time
+            updated_date = request.POST.get("date")
+            updated_time = request.POST.get("time")
+
+            # Ensure the date is saved in d/m/y format
+            parsed_date = dt.strptime(updated_date, "%Y-%m-%d").strftime("%d/%m/%Y")
+
+            # Update the corresponding entry in the schedule data
+            schedule_data[row_index]["date"] = parsed_date
+            schedule_data[row_index]["time"] = updated_time
+
+            # Save the updated data back to the JSON file
+            with open(json_file_path, 'w') as file:
+                json.dump(schedule_data, file, indent=4)
+
+            # Redirect to the same page after submission
+            return HttpResponseRedirect(request.path)
+
+    return render(request, 'staff_scheduling/schedule_management.html', {
+        'schedule_data': schedule_data
+    })

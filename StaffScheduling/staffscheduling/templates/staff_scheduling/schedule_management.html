@@ -1,9 +1,84 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Schedule Management</title>
+    <meta charset="UTF-8">
+    <title>Staff Schedule Management | Schedule System</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
 </head>
 <body>
-    <h1>Schedule Management Page</h1>
+    <div class="main-container">
+        <div class="title-container">
+            <h3>Staff Schedule</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" name="login">Log in</button>
+            </form>
+        </div>
+        <div class="content-container">
+            <div class="left-container">
+                <a href="{% url 'scheduling_page' %}" class="left-button">Schedule</a>
+                <a href="{% url 'time_off_page' %}" class="left-button">Time Off</a>
+                <a href="{% url 'request_changes_page' %}" class="left-button">Request Changes</a>
+                <a href="{% url 'schedule_management_page' %}" class="left-button">Schedule Management</a>
+            </div>
+            <div class="right-container">
+                <div class="staff-schedule-container">
+                    <h2>John Doe</h2>
+                    <p>Waiter</p>
+                    <table class="staff-schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Shift</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in schedule_data %}
+                            <tr>
+                                <td>
+                                    {{ entry.day }}<br>
+                                    <span class="shift-date">{{ entry.date }}</span>
+                                </td>
+                                <td>{{ entry.time }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="staff-schedule-container">
+                    <h2>Manage Schedule</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <table class="staff-schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in schedule_data %}
+                                <tr>
+                                    <td>
+                                        <input type="date" name="date_{{ forloop.counter }}" value="{{ entry.date }}" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="time_{{ forloop.counter }}" value="{{ entry.time }}" required>
+                                    </td>
+                                    <td>
+                                        <button type="submit" name="update" value="{{ forloop.counter }}">Update</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
