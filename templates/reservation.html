@@ -1,49 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Make Reservation</title>
+    <meta charset="UTF-8"> <!-- Character encoding for the document -->
+    <title>Make Reservation</title> <!-- Title of the page -->
     <style>
+        /* General body styling */
         body {
-            font-family: Arial, sans-serif;
-            max-width: 500px;
-            margin: auto;
-            padding-top: 40px;
+            font-family: Arial, sans-serif; /* Set the font family */
+            max-width: 500px; /* Limit the maximum width of the page */
+            margin: auto; /* Center the page horizontally */
+            padding-top: 40px; /* Add space at the top */
         }
+
+        /* Heading styling */
         h1 {
-            text-align: center;
+            text-align: center; /* Center the heading text */
         }
+
+        /* Form container styling */
         form {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
+            background: #f9f9f9; /* Light gray background */
+            padding: 20px; /* Padding inside the form */
+            border-radius: 8px; /* Rounded corners */
         }
+
+        /* Label styling */
         label {
-            display: block;
-            margin-top: 15px;
+            display: block; /* Make labels block elements */
+            margin-top: 15px; /* Add space above each label */
         }
+
+        /* Input, select, and textarea styling */
         input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
+            width: 100%; /* Full width */
+            padding: 8px; /* Padding inside the fields */
+            margin-top: 5px; /* Add space above the fields */
         }
+
+        /* Button styling */
         button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 10px;
-            background-color: #2e8b57;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            margin-top: 20px; /* Add space above the button */
+            width: 100%; /* Full width */
+            padding: 10px; /* Padding inside the button */
+            background-color: #2e8b57; /* Green background */
+            color: white; /* White text */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
         }
     </style>
 </head>
 <body>
+    <!-- Page heading -->
     <h1>Make a Reservation</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
+
+    <!-- Reservation form -->
+    <form method="POST"> <!-- Use POST method to submit the form -->
+        {% csrf_token %} <!-- CSRF token for security -->
+        {{ form.as_p }} <!-- Render the form fields dynamically -->
+        <button type="submit">Submit</button> <!-- Submit button for the form -->
     </form>
 </body>
 </html>
