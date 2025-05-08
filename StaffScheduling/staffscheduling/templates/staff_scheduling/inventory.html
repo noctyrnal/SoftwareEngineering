@@ -4,19 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Inventory | Inventory System</title>
+    <!-- Link to the external CSS file for styling -->
     <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
 </head>
 <body>
     <div class="main-container">
+        <!-- Title section -->
         <div class="title-container">
             <h3>Inventory</h3>
+            <!-- Login form -->
             <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Log in</button>
+                {% csrf_token %} <!-- CSRF token for security -->
+                {{ form.as_p }} <!-- Render the form fields dynamically -->
+                <button type="submit">Log in</button> <!-- Submit button for login -->
             </form>
         </div>
         <div class="content-container">
+            <!-- Inventory table -->
             <div class="staff-schedule-container">
                 <table class="staff-schedule-table">
                     <thead>
@@ -32,12 +36,13 @@
                     <tbody>
                         {% for item in inventory_data %}
                         <tr>
-                            <td>{{ item.item }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>{{ item.restock_level }}</td>
-                            <td>{{ item.phone_number }}</td>
-                            <td>{{ item.email }}</td>
+                            <td>{{ item.item }}</td> <!-- Item name -->
+                            <td>{{ item.quantity }}</td> <!-- Quantity -->
+                            <td>{{ item.restock_level }}</td> <!-- Restock level -->
+                            <td>{{ item.phone_number }}</td> <!-- Phone number -->
+                            <td>{{ item.email }}</td> <!-- Email -->
                             <td>
+                                <!-- Resupply button redirects to the resupply page -->
                                 <form method="get" action="{% url 'resupply_page' %}">
                                     <button type="submit">Resupply</button>
                                 </form>

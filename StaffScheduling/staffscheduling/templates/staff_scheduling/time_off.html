@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Time Off | Schedule System</title>
+    <!-- Link to the external CSS file for styling -->
     <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
     <script>
         // JavaScript to show a notification on form submission
@@ -16,32 +17,40 @@
 </head>
 <body>
     <div class="main-container">
+        <!-- Title section -->
         <div class="title-container">
             <h3>Staff Schedule</h3>
+            <!-- Login form -->
             <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Log in</button>
+                {% csrf_token %} <!-- CSRF token for security -->
+                {{ form.as_p }} <!-- Render the form fields dynamically -->
+                <button type="submit">Log in</button> <!-- Submit button for login -->
             </form>
         </div>
         <div class="content-container">
+            <!-- Sidebar navigation links -->
             <div class="left-container">
-                <a href="{% url 'scheduling_page' %}" class="left-button">Schedule</a>
-                <a href="{% url 'time_off_page' %}" class="left-button">Time Off</a>
-                <a href="{% url 'request_changes_page' %}" class="left-button">Request Changes</a>
-                <a href="{% url 'schedule_management_page' %}" class="left-button">Schedule Management</a>
+                <a href="{% url 'scheduling_page' %}" class="left-button">Schedule</a> <!-- Link to the scheduling page -->
+                <a href="{% url 'time_off_page' %}" class="left-button">Time Off</a> <!-- Link to the time off page -->
+                <a href="{% url 'request_changes_page' %}" class="left-button">Request Changes</a> <!-- Link to the request changes page -->
+                <a href="{% url 'schedule_management_page' %}" class="left-button">Schedule Management</a> <!-- Link to the schedule management page -->
             </div>
+            <!-- Main content area -->
             <div class="right-container">
                 <div class="staff-schedule-container">
                     <h3>Request Time Off</h3>
+                    <!-- Form to request time off -->
                     <form method="post" onsubmit="handleFormSubmission(event)">
-                        {% csrf_token %}
+                        {% csrf_token %} <!-- CSRF token for security -->
+                        <!-- Input field for selecting a date -->
                         <label for="time_off_date">Select a Date:</label>
                         <input type="date" id="time_off_date" name="time_off_date" required>
 
+                        <!-- Input field for providing a reason -->
                         <label for="reason">Input Reason:</label>
                         <input type="text" id="reason" name="reason" required>
 
+                        <!-- Submit button for the form -->
                         <button type="submit">Submit</button>
                     </form>
                 </div>

@@ -4,26 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Staff Schedule Management | Schedule System</title>
+    <!-- Link to the external CSS file for styling -->
     <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
 </head>
 <body>
     <div class="main-container">
+        <!-- Title section -->
         <div class="title-container">
             <h3>Staff Schedule</h3>
+            <!-- Login form -->
             <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" name="login">Log in</button>
+                {% csrf_token %} <!-- CSRF token for security -->
+                {{ form.as_p }} <!-- Render the form fields dynamically -->
+                <button type="submit" name="login">Log in</button> <!-- Submit button for login -->
             </form>
         </div>
         <div class="content-container">
+            <!-- Sidebar navigation links -->
             <div class="left-container">
                 <a href="{% url 'scheduling_page' %}" class="left-button">Schedule</a>
                 <a href="{% url 'time_off_page' %}" class="left-button">Time Off</a>
                 <a href="{% url 'request_changes_page' %}" class="left-button">Request Changes</a>
                 <a href="{% url 'schedule_management_page' %}" class="left-button">Schedule Management</a>
             </div>
+            <!-- Main content area -->
             <div class="right-container">
+                <!-- Staff schedule table -->
                 <div class="staff-schedule-container">
                     <h2>John Doe</h2>
                     <p>Waiter</p>
@@ -47,10 +53,11 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- Manage schedule form -->
                 <div class="staff-schedule-container">
                     <h2>Manage Schedule</h2>
                     <form method="post">
-                        {% csrf_token %}
+                        {% csrf_token %} <!-- CSRF token for security -->
                         <table class="staff-schedule-table">
                             <thead>
                                 <tr>
