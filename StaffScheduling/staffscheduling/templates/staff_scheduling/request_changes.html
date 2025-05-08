@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <title>Request Changes | Schedule System</title>
     <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
+    <script>
+        // JavaScript to show a notification on form submission
+        function handleFormSubmission(event) {
+            event.preventDefault(); // Prevent the default form submission
+            alert("Schedule Change request sent."); // Show a popup notification
+            event.target.submit(); // Submit the form after showing the notification
+        }
+    </script>
 </head>
 <body>
     <div class="main-container">
@@ -26,7 +34,7 @@
             <div class="right-container">
                 <div class="staff-schedule-container">
                     <h3>Request Changes</h3>
-                    <form method="post">
+                    <form method="post" onsubmit="handleFormSubmission(event)">
                         {% csrf_token %}
                         <label for="change_date">Select a Date:</label>
                         <input type="date" id="change_date" name="change_date" required>

@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory | Inventory System</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
+</head>
+<body>
+    <div class="main-container">
+        <div class="title-container">
+            <h3>Inventory</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Log in</button>
+            </form>
+        </div>
+        <div class="content-container">
+            <div class="staff-schedule-container">
+                <table class="staff-schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Restock Level</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Resupply</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in inventory_data %}
+                        <tr>
+                            <td>{{ item.item }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.restock_level }}</td>
+                            <td>{{ item.phone_number }}</td>
+                            <td>{{ item.email }}</td>
+                            <td>
+                                <form method="get" action="{% url 'resupply_page' %}">
+                                    <button type="submit">Resupply</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

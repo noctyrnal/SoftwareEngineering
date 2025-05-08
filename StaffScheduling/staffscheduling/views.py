@@ -138,3 +138,70 @@ def schedule_management_page(request):
     return render(request, 'staff_scheduling/schedule_management.html', {
         'schedule_data': schedule_data
     })
+
+def inventory_page(request):
+    # Path to the JSON file
+    json_file_path = os.path.join(os.path.dirname(__file__), 'inventory.json')
+
+    # Load existing data from the JSON file
+    if os.path.exists(json_file_path):
+        with open(json_file_path, 'r') as file:
+            inventory_data = json.load(file)
+    else:
+        inventory_data = []
+
+    return render(request, 'staff_scheduling/inventory.html', {
+        'inventory_data': inventory_data
+    })
+
+def resupply_page(request):
+    # Path to the JSON file
+    json_file_path = os.path.join(os.path.dirname(__file__), 'inventory.json')
+
+    # Load existing data from the JSON file
+    if os.path.exists(json_file_path):
+        with open(json_file_path, 'r') as file:
+            inventory_data = json.load(file)
+    else:
+        inventory_data = []
+
+    if request.method == "POST":
+        # Get the submitted data
+        item_name = request.POST.get("item")
+        quantity = int(request.POST.get("quantity"))
+        restock_level = int(request.POST.get("restock_level"))
+        phone_number = request.POST.get("phone_number")
+        email = request.POST.get("email")
+
+        # Check if the item already exists in the inventory
+        item_found = False
+        for item in inventory_data:
+            if item["item"].lower() == item_name.lower():
+                # Update the existing item
+                item["quantity"] = quantity
+                item["restock_level"] = restock_level
+                item["phone_number"] = phone_number
+                item["email"] = email
+                item_found = True
+                break
+
+        if not item_found:
+            # Add a new item to the inventory
+            inventory_data.append({
+                "item": item_name,
+                "quantity": quantity,
+                "restock_level": restock_level,
+                "phone_number": phone_number,
+                "email": email
+            })
+
+        # Save the updated data back to the JSON file
+        with open(json_file_path, 'w') as file:
+            json.dump(inventory_data, file, indent=4)
+
+        # Redirect to the inventory page after submission
+        return HttpResponseRedirect('/inventory/')
+
+    return render(request, 'staff_scheduling/resupply.html', {
+        'inventory_data': inventory_data
+    })

@@ -1,0 +1,30 @@
+[
+    {
+        "item": "Plates",
+        "quantity": 50,
+        "restock_level": 25,
+        "phone_number": "123-456-7890",
+        "email": "supplierA@example.com"
+    },
+    {
+        "item": "Bread",
+        "quantity": 23,
+        "restock_level": 20,
+        "phone_number": "987-654-3210",
+        "email": "supplierB@example.com"
+    },
+    {
+        "item": "Beef",
+        "quantity": 50,
+        "restock_level": 15,
+        "phone_number": "123-456-7890",
+        "email": "supplierC@example.com"
+    },
+    {
+        "item": "Butter",
+        "quantity": 5,
+        "restock_level": 20,
+        "phone_number": "123-456-7890",
+        "email": "supplierD@example.com"
+    }
+]

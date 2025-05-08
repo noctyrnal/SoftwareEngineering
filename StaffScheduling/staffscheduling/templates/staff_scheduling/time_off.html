@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <title>Time Off | Schedule System</title>
     <link rel="stylesheet" type="text/css" href="{% static 'staffscheduling/site.css' %}" />
+    <script>
+        // JavaScript to show a notification on form submission
+        function handleFormSubmission(event) {
+            event.preventDefault(); // Prevent the default form submission
+            alert("Time Off request sent."); // Show a popup notification
+            event.target.submit(); // Submit the form after showing the notification
+        }
+    </script>
 </head>
 <body>
     <div class="main-container">
@@ -26,7 +34,7 @@
             <div class="right-container">
                 <div class="staff-schedule-container">
                     <h3>Request Time Off</h3>
-                    <form method="post">
+                    <form method="post" onsubmit="handleFormSubmission(event)">
                         {% csrf_token %}
                         <label for="time_off_date">Select a Date:</label>
                         <input type="date" id="time_off_date" name="time_off_date" required>
