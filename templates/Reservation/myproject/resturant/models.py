@@ -1,18 +1,13 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-
-from django.db import models
+from datetime import date
 
 class Reservation(models.Model):
-    name = models.CharField(max_length=255, default="John Doe")
-    email = models.EmailField(default="example@example.com")
-    date = models.DateField(default="2025-01-01")
-    time = models.TimeField(default="12:00:00")
-    guests = models.IntegerField(default=1)
-    
-# You can add any other fields that you need, such as customer name, etc.name = models.CharField(max_length=255, default="John Doe")
-
-
-    # Add any other fields that you need, such as customer name, etc.
+    name = models.CharField(max_length=100, default='John Doe')  # Example: 'John Doe'
+    email = models.EmailField(default='example@example.com')  # Example: 'example@example.com'
+    date = models.DateField(default=date.today())  # Example: today's date
+    time = models.TimeField(default='19:00')  # Example: '19:00' (7:00 PM)
+    guests = models.IntegerField(default=2)  # Example: 2 guests
 
     def __str__(self):
-        return f"Reservation for {self.date} at {self.time}"
+        return f"Reservation for {self.name} on {self.date} at {self.time} for {self.guests} guests"

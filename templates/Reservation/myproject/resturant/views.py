@@ -4,20 +4,22 @@ from .forms import ReservationForm
 from .models import Reservation
 from django.http import JsonResponse
 
-def make_reservation(request):
+
+
+def home(request):
+    return render(request, 'index.html')
+
+
+def reservation(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Reservation successful!")
-            return redirect('make_reservation')  # Make sure your URL name matches this
-        else:
-            messages.error(request, "Please fix the errors below.")
+            return render(request, 'reservation.html', {
+                'form': ReservationForm(),  # Reset the form after successful submission
+                'messages': ['Reservation successful!']
+            })
     else:
         form = ReservationForm()
 
     return render(request, 'reservation.html', {'form': form})
-
-def get_reserved_slots(request):
-    reservations = Reservation.objects.all().values('date', 'time')
-    return JsonResponse(list(reservations), safe=False)
